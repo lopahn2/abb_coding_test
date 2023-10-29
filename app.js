@@ -40,10 +40,18 @@ app.use(
   })
 );
 
-let corsOptions = {
-  origin: "*",
-  credentials: true,
+const whitelist = ["http://localhost:3000"]; // 허용할 도메인을 나열합니다.
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
 };
+
 app.use(cors(corsOptions));
 
 // for postman
